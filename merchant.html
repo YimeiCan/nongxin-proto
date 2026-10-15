@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b8a4a" />
+  <title>农信 · 演示原型</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="./static/style.css" />
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./static/mock-api.js"></script>
+  <script>
+    (async function () {
+      const forceLocal = /[?&]local=1/.test(location.search) || location.hostname.indexOf('surge.sh') >= 0 || location.hostname.indexOf('jsdelivr') >= 0 || location.hostname.indexOf('githack') >= 0 || location.hostname.indexOf('github.io') >= 0 || location.protocol === 'file:';
+      let useMock = forceLocal;
+      if (!forceLocal) {
+        try {
+          const r = await fetch('/health', { cache: 'no-store' });
+          if (!r.ok) useMock = true;
+          else {
+            const j = await r.json();
+            if (j.mode === 'localStorage') useMock = true;
+          }
+        } catch (e) {
+          useMock = true;
+        }
+      }
+      if (useMock) window.__NX_INSTALL_MOCK__();
+      window.__NX_DATA_MODE__ = useMock ? 'localStorage' : 'api';
+    })().then(() => {
+      const s = document.createElement('script');
+      s.src = './static/app.js';
+      document.body.appendChild(s);
+    });
+  </script>
+</body>
+</html>
