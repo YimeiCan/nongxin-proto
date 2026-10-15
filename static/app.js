@@ -295,7 +295,7 @@
       <div class="topbar">
         <div>
           <div class="brand">农信</div>
-          <div class="sub">${esc(ROLE_LABEL[role])}端 · 演示</div>
+          <div class="sub">${esc(ROLE_LABEL[role])}端 · 演示${(window.__NX_DATA_MODE__==="localStorage")?" · 浏览器缓存":" · 服务端"}</div>
         </div>
         <div class="spacer"></div>
         <div class="userchip">${esc(state.user.display_name)}</div>
